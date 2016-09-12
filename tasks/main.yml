@@ -1,0 +1,51 @@
+---
+# tasks file for samba
+- name: install samba
+  apt:
+    name={{ item }}
+    state=present
+    update_cache=yes
+    cache_valid_time=3600
+  with_items:
+    - samba
+    - samba-common
+    - smbclient
+    - samba-doc
+    - expect
+
+- name: add group tuxit
+  group: name=tuxit state=present
+
+- name: add user with group tuxit
+  user: name={{ item.name }} group=tuxit state=present
+  with_items: "{{ samba_users }}"
+
+- name: copy file expect password file
+  template:
+    src: /etc/ansible/roles/samba/files/pass.exp
+    dest: /tmp/
+    mode: 777
+
+- name: add password samba for users
+  shell: /tmp/pass.exp {{ item.name }} {{ item.password }}
+  with_items: "{{ samba_users }}"
+
+- name: "create directory"
+  file:
+    state: directory
+    path: "{{ item.path }}"
+    owner: admin
+    group: tuxit
+    mode: 0770
+    recurse: yes
+  with_items: "{{ samba_shares }}"
+  ignore_errors: yes
+
+- name: Copy the Customize smb.conf file
+  template: 
+    src: /etc/ansible/roles/samba/files/smb.conf.j2
+    dest: /etc/samba/smb.conf
+    backup: yes
+  notify:
+    - Restart Samba
+

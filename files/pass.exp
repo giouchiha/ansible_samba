@@ -1,0 +1,5 @@
+#!/usr/bin/expect -f
+spawn smbpasswd -a [lindex $argv 0]
+expect "New SMB password:" { send "[lindex $argv 1]\r"} 
+expect "Retype new SMB password:" { send "[lindex $argv 1]\r" }
+interact

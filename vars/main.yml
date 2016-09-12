@@ -1,0 +1,10 @@
+---
+# vars file for samba
+samba_shares:
+  - {'name': 'resplado', 'path':'/respaldo/allaccess/'}
+  - {'name': 'secured', 'path':'/respaldo/allaccess/secured'}
+  - {'name': 'secured1', 'path':'/respaldo/allaccess/secured1'}
+
+samba_users:
+  - {'name': 'admin', 'password':'123'}
+  - {'name': 'admin1', 'password':'123'}

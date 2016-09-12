@@ -1,0 +1,26 @@
+[global]
+workgroup = WORKGROUP
+server string = Samba Server %v
+netbios name = srvr1
+security = user
+map to guest = bad user
+name resolve order = bcast host
+dns proxy = no
+#============================ Share Definitions ==============================
+[respaldo]
+path = /respaldo/allaccess/
+valid users = admin
+browsable = no
+read only = no
+
+[secured]
+path = /respaldo/allaccess/secured
+valid users = admin
+browsable = no
+read only = no
+
+[secured1]
+path = /respaldo/allaccess/secured1
+valid users = admin,admin1
+browsable = no
+read only = no

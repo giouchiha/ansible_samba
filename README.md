@@ -1,31 +1,57 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Este playbook levanta un servidor samba basico, crea un rol admin, que tiene acceso a la carpeta raiz /respaldo/allaccess/, y un segundo usuario que solo tiene acceso a un subdirectorio /respaldo/allaccess/secured1.
 
 Requirements
 ------------
+El playbook se corrio en el siguiente ambiente:
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- ansible 2.0.1.0
+- ubuntu 14.04.5
 
 Role Variables
 --------------
+Se utilizan las sigiuente variables:
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+samba_shares:
+  - {'name': 'resplado', 'path':'/respaldo/allaccess/'}
+  - {'name': 'secured', 'path':'/respaldo/allaccess/secured'}
+  - {'name': 'secured1', 'path':'/respaldo/allaccess/secured1'}
 
-Dependencies
-------------
+samba_users:
+  - {'name': 'admin', 'password':'123'}
+  - {'name': 'admin1', 'password':'123'}
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Para el archivo smb.conf, la asignacion de usuario es estatica, un usuario con acceso total y uno con solo acceso a una carpeta:
+
+path = /respaldo/allaccess/
+valid users = admin
+path = /respaldo/allaccess/secured
+valid users = admin
+[secured1]
+path = /respaldo/allaccess/secured1
+valid users = admin,admin1
+
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+---
+- hosts: all 
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+  pre_tasks:
+
+  - name: Running pre tasks routine
+    shell: echo 'I":" Beginning to configure the server..'
+
+  - name: Pretask | Update apt cache
+    #apt: update_cache=yes cache_valid_time=3600
+    apt: update_cache=yes
+    register: apt_update
+
+  roles:
+    - samba
 
 License
 -------
@@ -35,4 +61,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+@gio_uchiha

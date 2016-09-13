@@ -36,7 +36,7 @@ valid users = admin,admin1
 
 Example Playbook
 ----------------
-
+```
 ---
 - hosts: all 
 
@@ -46,13 +46,12 @@ Example Playbook
     shell: echo 'I":" Beginning to configure the server..'
 
   - name: Pretask | Update apt cache
-    #apt: update_cache=yes cache_valid_time=3600
     apt: update_cache=yes
     register: apt_update
 
   roles:
     - samba
-
+```
 License
 -------
 

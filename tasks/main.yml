@@ -22,7 +22,7 @@
 
 - name: copy file expect password file
   template:
-    src: /etc/ansible/roles/samba/files/pass.exp
+    src: /etc/ansible/roles/ansible_samba/files/pass.exp
     dest: /tmp/
     mode: 777
 
@@ -43,7 +43,7 @@
 
 - name: Copy the Customize smb.conf file
   template: 
-    src: /etc/ansible/roles/samba/files/smb.conf.j2
+    src: /etc/ansible/roles/ansible_samba/files/smb.conf.j2
     dest: /etc/samba/smb.conf
     backup: yes
   notify:
